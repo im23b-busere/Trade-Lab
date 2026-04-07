@@ -34,3 +34,23 @@ Der Fokus dieses ersten Setups liegt auf einer klaren technischen Basis mit Flas
 ## Hinweise
 - Die Datenbank liegt lokal unter `instance/tradelab.sqlite3`.
 - Import/Export und Dashboard-Logik folgen in den nächsten Commits.
+
+## Aktueller Stand (Commit 2)
+- API-Endpoint zum Anlegen eines Trades: `POST /api/trades`
+- Automatische Berechnung von `pnl` und `rr` beim Speichern
+- Statistik-Endpoint: `GET /api/stats` (Trades, Win-Rate, Gesamt-PnL, durchschnittliches RR)
+
+### Beispiel: Trade anlegen
+```json
+{
+   "symbol": "AAPL",
+   "side": "long",
+   "quantity": 10,
+   "entry_price": 175.2,
+   "exit_price": 181.8,
+   "stop_loss": 172.0,
+   "take_profit": 185.0,
+   "fees": 1.5,
+   "notes": "Breakout-Setup"
+}
+```
