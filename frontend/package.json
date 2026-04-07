@@ -1,0 +1,16 @@
+{
+  "name": "tradelab-frontend-tooling",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend lint/format tooling for CI checks",
+  "scripts": {
+    "lint-check": "eslint .",
+    "format-check": "prettier --check .",
+    "lint-fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "prettier": "^3.6.2"
+  }
+}
