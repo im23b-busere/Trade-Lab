@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, request
+import csv
+import io
+from flask import Blueprint, jsonify, request, Response
 
 from .db import get_db
 
@@ -140,6 +142,22 @@ def create_trade():
     return jsonify(_trade_row_to_dict(created)), 201
 
 
+@bp.get("/api/trades")
+def list_trades():
+    db = get_db()
+    cursor = db.execute("SELECT * FROM trades ORDER BY created_at DESC")
+    trades = cursor.fetchall()
+    return jsonify([_trade_row_to_dict(t) for t in trades])
+
+
+@bp.delete("/api/trades/<int:trade_id>")
+def delete_trade(trade_id):
+    db = get_db()
+    db.execute("DELETE FROM trades WHERE id = ?", (trade_id,))
+    db.commit()
+    return jsonify({"status": "deleted"}), 200
+
+
 @bp.get("/api/stats")
 def stats():
     db = get_db()
@@ -169,4 +187,28 @@ def stats():
             "total_pnl": round(totals["total_pnl"], 4),
             "avg_rr": round(totals["avg_rr"], 4),
         }
+    )
+
+@bp.get("/api/export")
+def export_csv():
+    db = get_db()
+    cursor = db.execute("SELECT * FROM trades ORDER BY created_at DESC")
+    trades = cursor.fetchall()
+
+    if not trades:
+        return Response("No trades to export", status=400)
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    headers = trades[0].keys()
+    writer.writerow(headers)
+    
+    for row in trades:
+        writer.writerow([row[col] for col in headers])
+        
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=trades.csv"}
     )

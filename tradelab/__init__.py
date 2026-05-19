@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 from .db import init_app as init_db_app
 
@@ -11,6 +12,7 @@ def create_app(test_config=None):
         SECRET_KEY="dev",
         DATABASE=os.path.join(app.instance_path, "tradelab.sqlite3"),
     )
+    CORS(app)
 
     if test_config is not None:
         app.config.update(test_config)
