@@ -67,13 +67,7 @@ def _trade_row_to_dict(row):
 
 @bp.get("/")
 def index():
-    return jsonify(
-        {
-            "app": "TradeLab",
-            "status": "ok",
-            "message": "Trade tracking backend initialized.",
-        }
-    )
+    return bp.send_static_file('index.html')
 
 
 @bp.post("/api/trades")

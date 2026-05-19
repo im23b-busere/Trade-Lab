@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : '';
 
 function App() {
   const [stats, setStats] = useState({
